@@ -40,6 +40,11 @@ public class SysUserEntity implements Serializable {
 	private Long userId;
 
 	/**
+	 * 昵称
+	 */
+	private String accountName;
+
+	/**
 	 * 用户名
 	 */
 	@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
@@ -70,7 +75,12 @@ public class SysUserEntity implements Serializable {
 	private String mobile;
 
 	/**
-	 * 状态  0：禁用   1：正常
+	 * qq号
+	 */
+	private String qq;
+
+	/**
+	 * 状态  0：禁用   1：正常   2：待审核   3：驳回   4：退社
 	 */
 	private Integer status;
 	
