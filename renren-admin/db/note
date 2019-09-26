@@ -1,0 +1,69 @@
+用户表  inet_user
+    user_Id
+    昵称
+    用户名
+    密码
+    盐
+    手机号
+    年级   	：grade_id
+    生日
+    qq
+    邮箱
+    状态     0：禁用   1：正常   2：待审核   3：驳回   4：退社
+    部门id
+    创建时间
+    头像url
+
+
+
+年级表   inet_grade
+    id
+    年级名称 17  18  19
+
+
+课堂表    inet_class
+    id
+    课堂名称id
+    上课日期
+    上课分钟数
+    教室
+    状态   0:上课中  -1:下课  1:未上课
+    创建者id
+    创建时间
+
+
+课堂名称表   inet_class_name
+    id
+    课堂名称
+    年级		：grade_id
+    部门id
+    创建者id
+    创建时间
+
+
+到课记录表   inet_class_arrive_record
+    id
+    用户id
+    课堂id
+    创建时间
+
+
+课堂作业表   inet_class_work
+    id
+    课堂id
+    创建者id
+    创建时间
+    截止时间
+    附件url
+    作业详情    富文本
+
+作业记录表   inet_class_work_record
+    id
+    课堂id
+    用户id
+    创建时间
+    文件原始名称
+    分数
+    点评
+    文件url
+    回执文件url
