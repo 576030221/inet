@@ -5,7 +5,7 @@
     密码
     盐
     手机号
-    年级   	：grade_id
+    年级   	：grade
     生日
     qq
     邮箱
@@ -14,11 +14,6 @@
     创建时间
     头像url
 
-
-
-年级表   inet_grade
-    id
-    年级名称 17  18  19
 
 
 课堂表    inet_class
@@ -35,7 +30,7 @@
 课堂名称表   inet_class_name
     id
     课堂名称
-    年级		：grade_id
+    年级		：grade
     部门id
     创建者id
     创建时间

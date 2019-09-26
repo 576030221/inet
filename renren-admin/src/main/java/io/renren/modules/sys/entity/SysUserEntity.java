@@ -70,9 +70,9 @@ public class SysUserEntity implements Serializable {
 	private String email;
 
 	/**
-	 * 年级id
+	 * 年级编号
 	 */
-	private Long gradeId;
+	private String gradeNumber;
 
 	/**
 	 * 生日
