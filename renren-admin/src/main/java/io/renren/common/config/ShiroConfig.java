@@ -84,10 +84,12 @@ public class ShiroConfig {
 
         filterMap.put("/statics/**", "anon");
         filterMap.put("/login.html", "anon");
+        filterMap.put("/examine_wait.html", "anon");// 提示等待审核界面
         filterMap.put("/sys/login", "anon");
+        filterMap.put("/sys/user/regist", "anon");
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");
-        filterMap.put("/**", "authc");
+//        filterMap.put("/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;

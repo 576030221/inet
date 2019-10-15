@@ -1,14 +1,14 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/user/list',
+        url: baseURL + 'sys/user/list?status=2',
         datatype: "json",
         colModel: [
             { label: '学号', name: 'username', width: 75 },
             { label: '姓名', name: 'accountName', width: 75 },
-            { label: '年级', name: 'gradeNumber', sortable: false, width: 30 },
-			{ label: '邮箱', name: 'email', width: 80 },
-			{ label: '手机号', name: 'mobile', width: 80 },
-			{ label: '状态', name: 'status', width: 30, formatter: function(value, options, row){
+            { label: 'QQ号', name: 'qq', sortable: false, width: 75 },
+			{ label: '年级', name: 'gradeNumber', width: 90 },
+			{ label: '申请时间', name: 'createTime', width: 100 },
+			{ label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
                     if (value == 1)
                         return '<span class="label label-success">正常</span>';
                     else if(value == 0)
@@ -21,15 +21,21 @@ $(function () {
                         return '<span class="label label-danger">退社</span>';
 
 			}},
-            { label: '最近登陆时间', name: 'lastLoginTime', width: 85},
-            { label: '创建时间', name: 'createTime', width: 85}
+            {
+                label: '操作', name: 'remarks', index: 'remarks', width: 130, formatter: function (value, options, row) {
+                    var htmlStr;
+                    htmlStr = '<a class="btn btn-primary" onclick="vm.yes(' + '\'' + row.userId + '\'' + ')"><i class="fa fa-pencil-square-o"></i>&nbsp;通过 </a>'
+                    htmlStr = htmlStr + ' <a class="btn btn-primary" onclick="vm.no(' + row.userId + ')"><i class="fa fa-trash-o"></i>&nbsp;驳回</a>';
+                    return htmlStr;
+                }
+            }
         ],
 		viewrecords: true,
         height: 385,
         rowNum: 10,
 		rowList : [10,30,50],
-        rownumbers: true, 
-        rownumWidth: 25, 
+        rownumbers: true,
+        rownumWidth: 25,
         autowidth:true,
         multiselect: true,
         pager: "#jqGridPager",
@@ -40,13 +46,13 @@ $(function () {
             records: "page.totalCount"
         },
         prmNames : {
-            page:"page", 
-            rows:"limit", 
+            page:"page",
+            rows:"limit",
             order: "order"
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
         }
     });
 });
@@ -70,11 +76,8 @@ var vm = new Vue({
     data:{
         queryData:{
             username: null,
-            gradeNumber:"",
-            status:"",
-            accountName:null,
+            status:"2",
         },
-        gradeList:null,
         showList: true,
         title:null,
         roleList:{},
@@ -85,13 +88,6 @@ var vm = new Vue({
             roleIdList:[],
             accountName:null
         }
-    },
-    mounted:function(){
-        // 初始化获取可选年级
-        $.get(baseURL + "sys/constant/getGrade", function(r){
-            vm.gradeList = r.list;
-        });
-        console.log(vm.gradeList)
     },
     methods: {
         query: function () {
@@ -140,6 +136,54 @@ var vm = new Vue({
             }
 
             window.location.href=baseURL+"sys/permissions/index/"+userId;
+        },
+        /**
+         * 审核通过
+         * @param userId
+         */
+        yes: function (userId) {
+            $.ajax({
+                type: "POST",
+                url: baseURL + "sys/user/examine",
+                // contentType: "application/json",
+                data: {
+                    "userId" : userId,
+                    "status" : "1"
+                },
+                success: function(r){
+                    if(r.code == 0){
+                        alert('操作成功', function(){
+                            vm.reload();
+                        });
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        },
+        /**
+         * 驳回
+         * @param userId
+         */
+        no: function (userId) {
+            $.ajax({
+                type: "POST",
+                url: baseURL + "sys/user/examine",
+                // contentType: "application/json",
+                data: {
+                    "userId" : userId,
+                    "status" : "3"
+                },
+                success: function(r){
+                    if(r.code == 0){
+                        alert('操作成功', function(){
+                            vm.reload();
+                        });
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
         },
         del: function () {
             var userIds = getSelectedRows();

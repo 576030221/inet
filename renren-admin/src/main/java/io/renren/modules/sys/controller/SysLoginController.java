@@ -12,6 +12,8 @@ package io.renren.modules.sys.controller;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import io.renren.common.utils.R;
+import io.renren.modules.sys.entity.SysUserEntity;
+import io.renren.modules.sys.service.SysUserService;
 import io.renren.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -26,6 +28,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * 登录相关
@@ -36,6 +39,8 @@ import java.io.IOException;
 public class SysLoginController {
 	@Autowired
 	private Producer producer;
+	@Autowired
+	private SysUserService sysUserService;
 	
 	@RequestMapping("captcha.jpg")
 	public void captcha(HttpServletResponse response)throws IOException {
@@ -59,10 +64,10 @@ public class SysLoginController {
 	@ResponseBody
 	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
 	public R login(String username, String password, String captcha) {
-		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+		/*String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
 		if(!captcha.equalsIgnoreCase(kaptcha)){
 			return R.error("验证码不正确");
-		}
+		}*/
 		
 		try{
 			Subject subject = ShiroUtils.getSubject();
@@ -77,7 +82,11 @@ public class SysLoginController {
 		}catch (AuthenticationException e) {
 			return R.error("账户验证失败");
 		}
-	    
+		// 更新最新一次登陆时间
+		SysUserEntity userEntity = ShiroUtils.getUserEntity();
+		userEntity.setLastLoginTime(new Date());
+		sysUserService.updateById(userEntity);
+
 		return R.ok();
 	}
 	

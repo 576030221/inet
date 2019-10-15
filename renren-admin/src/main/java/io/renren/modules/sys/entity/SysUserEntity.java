@@ -98,6 +98,11 @@ public class SysUserEntity implements Serializable {
 	 * 状态  0：禁用   1：正常   2：待审核   3：驳回   4：退社
 	 */
 	private Integer status;
+
+	/**
+	 * 上一次登陆时间
+	 */
+	private Date lastLoginTime;
 	
 	/**
 	 * 角色ID列表
@@ -121,4 +126,7 @@ public class SysUserEntity implements Serializable {
 	 */
 	@TableField(exist=false)
 	private String deptName;
+
+	@TableField(exist = false)
+	private Integer level;
 }

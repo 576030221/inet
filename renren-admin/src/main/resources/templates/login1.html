@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>inet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/login1.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="dowebok" id="dowebok">
+    <div class="form-container sign-up-container">
+        <form action="#">
+            <h1>注册</h1>
+            <!--<div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>或使用邮箱注册</span>-->
+
+            <h4 id="msgZc" style="margin-bottom: 0px;height: 20px;"></h4>
+            <input id="rGusername" type="text" placeholder="学号">
+            <input id="rGaccountName" type="text" placeholder="姓名">
+            <input id="rGqq" type="text" placeholder="QQ号">
+            <select id="rGlevel" name="level" class="form-control">
+                <option value="0">年级</option>
+                <option value="1">大一</option>
+                <option value="2">大二</option>
+                <option value="3">大三</option>
+            </select>
+            <button style="margin-top:20px;" onclick="regist()">注册</button>
+        </form>
+    </div>
+    <div class="form-container sign-in-container">
+        <form action="#">
+            <h1>登录</h1>
+            <!--<div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>或使用您的帐号</span>-->
+            <h4 id="msgDl" style="margin-bottom: 0px;height: 20px;"></h4>
+            <input type="text" id="username" placeholder="学号">
+            <input type="password" id="password" placeholder="密码">
+            <a href="#">忘记密码？</a>
+            <button onclick="login()">登录</button>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>已有帐号？</h1>
+                <p>请使用您的帐号进行登录</p>
+                <button class="ghost" id="signIn">登录</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>没有帐号？</h1>
+                <p>立即注册加入INet，和我们一起进步吧</p>
+                <button class="ghost" id="signUp">注册</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script>
+    var signUpButton = document.getElementById('signUp')
+    var signInButton = document.getElementById('signIn')
+    var container = document.getElementById('dowebok')
+
+    signUpButton.addEventListener('click', function () {
+        container.classList.add('right-panel-active')
+    })
+
+    signInButton.addEventListener('click', function () {
+        container.classList.remove('right-panel-active')
+    })
+    $(function(){
+        /*$.ajax({
+            type: 'get',
+            url: '/constant/getGrade',
+            dataType: "json",
+            success: function (data) {
+                //拼接下拉框
+                $("#sel_role").append("<option value='11'>1121</option>");
+
+            }
+        });*/
+
+    });
+    function login() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var data = "username="+username+"&password="+password+"&captcha=1";
+        $.ajax({
+            type: "POST",
+            url: "sys/login",
+            data: data,
+            dataType: "json",
+            success: function(result){
+                if(result.code == 0){//登录成功
+                    parent.location.href ='index.html';
+                }else{
+                    document.getElementById("msgDl").innerHTML="<i class=\"fa fa-exclamation-triangle\">"+ result.msg +"</i>";
+                }
+            }
+        });
+    }
+    function regist() {
+        $.ajax({
+            type: "POST",
+            url: "sys/user/regist",
+            data: JSON.stringify({
+                username :$("#rGusername").val(),
+                accountName:$("#rGaccountName").val(),
+                qq:$("#rGqq").val(),
+                level:$("#rGlevel").val()
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(result){
+                if(result.code == 0){// 注册成功 跳转到等待审核提示页面
+                    parent.location.href ='examine_wait.html';
+                }else{
+                    document.getElementById("msgZc").innerHTML="<i class=\"fa fa-exclamation-triangle\">"+ result.msg +"</i>";
+                }
+            }
+        });
+    }
+</script>
+</body>
+
+</html>
