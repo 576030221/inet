@@ -3,6 +3,8 @@
 <head>
     <title></title>
 		<#include "/header.html">
+
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/laydate.css" id="layuicss-laydate">
 </head>
 <body>
 <div id="rrapp" v-cloak>
@@ -25,46 +27,45 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-														                    <div class="form-group">
-                        <div class="col-sm-2 control-label">课堂的名称，取自课堂名称表</div>
+
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">年级</div>
+                <div class="form-group col-sm-2">
+                    <select @change="getClassNameList" class="form-control" id="gradeId"
+                            v-model="inetClass.gradeNumber" :value="inetClass.gradeNumber">
+                        <option value="">请选择年级</option>
+                        <option  v-for="list in gradeList" :value="list">{{list}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">课堂名称</div>
+                <div class="col-sm-2">
+                    <select class="form-control"
+                            v-model="inetClass.classNameId" :value="inetClass.classNameId">
+                        <option value="">请选择名称</option>
+                        <option v-for="list in classNameList" :value="list.id">{{list.name}}</option>
+                    </select>
+                </div>
+            </div>
+			<div class="form-group">
+                        <div class="col-sm-2 control-label">开始时间</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="inetClass.classNameId" placeholder="课堂的名称，取自课堂名称表"/>
+                            <input id="startTimeInput" @focus="getStartTime" type="text" class="form-control" v-model="inetClass.startTime" placeholder="课堂开始时间"/>
                         </div>
-                    </div>
+             </div>
 											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">课堂开始时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="inetClass.startTime" placeholder="课堂开始时间"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">课堂持续时间</div>
+                        <div class="col-sm-2 control-label">持续时间</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="inetClass.continuousTime" placeholder="课堂持续时间"/>
                         </div>
                     </div>
 											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">教室 门牌号</div>
+                        <div class="col-sm-2 control-label">教室</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="inetClass.classroom" placeholder="教室 门牌号"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">状态 0：上课中 -1:下课  1:未上课</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="inetClass.status" placeholder="状态 0：上课中 -1:下课  1:未上课"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">创建时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="inetClass.createTime" placeholder="创建时间"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">创建者id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="inetClass.createUserId" placeholder="创建者id"/>
+                            <input type="text" class="form-control" placeholder="教室" v-model="inetClass.classroom"/>
                         </div>
                     </div>
 							            <div class="form-group">
@@ -77,5 +78,6 @@
 </div>
 
 <script src="${request.contextPath}/statics/js/modules/curriculum/inetclass.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/laydate.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package io.renren.modules.curriculum.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -41,6 +42,10 @@ public class InetClassEntity implements Serializable {
 	 */
 	private String classroom;
 	/**
+	 * 属于哪个年级
+	 */
+	private String gradeNumber;
+	/**
 	 * 状态 0：上课中 -1:下课  1:未上课
 	 */
 	private Integer status;
@@ -52,5 +57,12 @@ public class InetClassEntity implements Serializable {
 	 * 创建者id
 	 */
 	private Long createUserId;
+
+
+	/**
+	 * 修改者姓名
+	 */
+	@TableField(exist=false)
+	private String createUserAccountName;
 
 }

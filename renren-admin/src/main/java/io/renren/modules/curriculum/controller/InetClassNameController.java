@@ -1,9 +1,13 @@
 package io.renren.modules.curriculum.controller;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
 import io.renren.common.validator.ValidatorUtils;
+import io.renren.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +37,7 @@ public class InetClassNameController {
     private InetClassNameService inetClassNameService;
 
     /**
-     * 列表
+     * 列表 分页
      */
     @RequestMapping("/list")
     @RequiresPermissions("curriculum:inetclassname:list")
@@ -41,6 +45,17 @@ public class InetClassNameController {
         PageUtils page = inetClassNameService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+    /**
+     * 列表 全部 根据年级筛选
+     */
+    @RequestMapping("/listByGradeNumber")
+    public R listByGradeNumber(String gradeNumber){
+        System.out.println(gradeNumber);
+        List<InetClassNameEntity> list = inetClassNameService.listByGradeNumber(gradeNumber);
+        System.out.println(new Gson().toJson(list));
+
+        return R.ok().put("list", list);
     }
 
 
@@ -61,6 +76,8 @@ public class InetClassNameController {
     @RequestMapping("/save")
     @RequiresPermissions("curriculum:inetclassname:save")
     public R save(@RequestBody InetClassNameEntity inetClassName){
+        inetClassName.setCreateTime(new Date());
+        inetClassName.setCreateUserId(ShiroUtils.getUserId());
         inetClassNameService.save(inetClassName);
 
         return R.ok();
@@ -73,6 +90,7 @@ public class InetClassNameController {
     @RequiresPermissions("curriculum:inetclassname:update")
     public R update(@RequestBody InetClassNameEntity inetClassName){
         ValidatorUtils.validateEntity(inetClassName);
+        inetClassName.setCreateUserId(ShiroUtils.getUserId());
         inetClassNameService.updateById(inetClassName);
         
         return R.ok();

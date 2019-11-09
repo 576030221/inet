@@ -4,13 +4,20 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '课堂的名称，取自课堂名称表', name: 'classNameId', index: 'class_name_id', width: 80 }, 			
-			{ label: '课堂开始时间', name: 'startTime', index: 'start_time', width: 80 }, 			
-			{ label: '课堂持续时间', name: 'continuousTime', index: 'continuous_time', width: 80 }, 			
-			{ label: '教室 门牌号', name: 'classroom', index: 'classroom', width: 80 }, 			
-			{ label: '状态 0：上课中 -1:下课  1:未上课', name: 'status', index: 'status', width: 80 }, 			
+			{ label: '课名', name: 'classNameId', index: 'class_name_id', width: 80 },
+			{ label: '开始时间', name: 'startTime', index: 'start_time', width: 80 },
+			{ label: '持续时间', name: 'continuousTime', index: 'continuous_time', width: 80 },
+			{ label: '教室', name: 'classroom', index: 'classroom', width: 80 },
+			{ label: '状态', name: 'status', index: 'status', width: 80,formatter: function(value, options, row){
+                    if (value == 0)
+                        return '<span class="label label-success">上课中</span>';
+                    else if(value == 2)
+                        return '<span class="label label-danger">已结束</span>';
+                    else if(value == 1)
+                        return '<span class="label label-warning">未开始</span>';
+                }},
 			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-			{ label: '创建者id', name: 'createUserId', index: 'create_user_id', width: 80 }			
+			{ label: '操作者', name: 'createUserAccountName', index: 'create_user_id', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -39,14 +46,47 @@ $(function () {
     });
 });
 
+
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		showList: true,
 		title: null,
+        gradeList:null,
+        classNameList:null,
 		inetClass: {}
 	},
+    mounted:function(){
+        // 初始化获取可选年级
+        $.get(baseURL + "sys/constant/getGrade", function(r){
+            vm.gradeList = r.list;
+        });
+        // console.log(this.gradeList)
+        // console.log(laydate)
+
+    },
 	methods: {
+
+	    getClassNameList:function(event){
+	        console.log(vm.inetClass.gradeNumber)
+            // 初始化获取可选年级
+            $.get(baseURL + "curriculum/inetclassname/listByGradeNumber?gradeNumber=" + vm.inetClass.gradeNumber, function(r){
+                vm.classNameList = r.list;
+                console.log(vm.classNameList)
+            });
+        },
+        getStartTime:function(){
+            laydate.render({
+                elem: "#startTimeInput", //指定元素
+                type: 'datetime',
+                format:'yyyy-MM-dd HH:mm:ss',
+                trigger: 'click',
+                done:function(value, date, endDate){
+                    vm.inetClass.startTime = value;
+                    console.log(value)
+                }
+            });
+        },
 		query: function () {
 			vm.reload();
 		},

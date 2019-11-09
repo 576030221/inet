@@ -81,7 +81,6 @@ var vm = new Vue({
         user:{
             status:1,
             deptId:null,
-            deptName:null,
             roleIdList:[],
             accountName:null
         }

@@ -3,12 +3,11 @@ $(function () {
         url: baseURL + 'curriculum/inetclassname/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden:true },
 			{ label: '课堂名称', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '属于哪个年级 外键', name: 'grade', index: 'grade', width: 80 }, 			
-			{ label: '属于哪个部门', name: 'deptId', index: 'dept_id', width: 80 }, 			
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-			{ label: '创建者', name: 'createUserId', index: 'create_user_id', width: 80 }			
+			{ label: '年级', name: 'gradeNumber', index: 'grade', width: 80 },
+			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 },
+			{ label: '操作者', name: 'createUserAccountName', index: 'create_user_id', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -40,10 +39,24 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+        queryData:{
+            name: null,
+            gradeNumber:"",
+        },
 		showList: true,
 		title: null,
-		inetClassName: {}
+		inetClassName: {
+            grade:"请选择年纪"
+        },
+        gradeList:null,
 	},
+    mounted:function(){
+        // 初始化获取可选年级
+        $.get(baseURL + "sys/constant/getGrade", function(r){
+            vm.gradeList = r.list;
+        });
+        console.log(vm.gradeList)
+    },
 	methods: {
 		query: function () {
 			vm.reload();
@@ -123,7 +136,8 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+                postData:vm.queryData,
                 page:page
             }).trigger("reloadGrid");
 		}

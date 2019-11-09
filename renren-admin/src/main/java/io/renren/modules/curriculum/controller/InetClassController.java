@@ -1,9 +1,13 @@
 package io.renren.modules.curriculum.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import io.renren.common.validator.ValidatorUtils;
+import io.renren.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +35,9 @@ import io.renren.common.utils.R;
 public class InetClassController {
     @Autowired
     private InetClassService inetClassService;
+
+
+
 
     /**
      * 列表
@@ -61,6 +68,9 @@ public class InetClassController {
     @RequestMapping("/save")
     @RequiresPermissions("curriculum:inetclass:save")
     public R save(@RequestBody InetClassEntity inetClass){
+        inetClass.setCreateTime(new Date());
+        inetClass.setCreateUserId(ShiroUtils.getUserId());
+        inetClass.setStatus(1);
         inetClassService.save(inetClass);
 
         return R.ok();
