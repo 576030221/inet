@@ -1,0 +1,5 @@
+http://localhost/inet/inet/**.html
+
+上面这个是访问地址  ** 换成你html的名字
+
+不要全部一股脑都放在inet文件夹下，可以在inet文件夹下再创建文件夹
