@@ -33,7 +33,7 @@ public class InetClassArriveRecordController {
     private InetClassArriveRecordService inetClassArriveRecordService;
 
     /**
-     * 列表234234
+     * 列表234234213
      */
     @RequestMapping("/list")
     @RequiresPermissions("curriculum:inetclassarriverecord:list")
