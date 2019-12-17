@@ -45,7 +45,7 @@ public class InetClassArriveRecordController {
 
 
     /**
-     * 信息
+     * 信息111111
      */
     @RequestMapping("/info/{id}")
     @RequiresPermissions("curriculum:inetclassarriverecord:info")
